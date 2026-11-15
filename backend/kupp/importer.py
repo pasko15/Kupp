@@ -1,4 +1,4 @@
-"""Import 30 days of Kassalapp EAN history for manually approved matches."""
+"""Import configured Kassalapp EAN history for manually approved matches."""
 
 from __future__ import annotations
 
@@ -24,10 +24,11 @@ def as_minor_units(price: object) -> int:
     return int(amount.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
 
 
-def import_history() -> tuple[int, int, int]:
+def import_history() -> tuple[int, int, int, int]:
     api_key = get_api_key()
     thresholds = load_thresholds()
     freshness_days = int(thresholds["freshness_days"])
+    history_window_days = int(thresholds["history_window_days"])
 
     db = sqlite3.connect(DB_PATH)
     db.execute("PRAGMA foreign_keys = ON")
@@ -51,7 +52,7 @@ def import_history() -> tuple[int, int, int]:
         db.commit()
 
         try:
-            result = fetch_history(api_key, list(match_by_ean))
+            result = fetch_history(api_key, list(match_by_ean), days=history_window_days)
             records_seen = 0
             records_added = 0
             skipped_products = []
@@ -137,7 +138,8 @@ def import_history() -> tuple[int, int, int]:
                 ),
             )
             db.commit()
-            return requested, records_seen, records_added
+            days_included = int(result.get("meta", {}).get("days_included", history_window_days))
+            return requested, records_seen, records_added, days_included
         except Exception as exc:
             db.rollback()
             db.execute(
@@ -153,9 +155,9 @@ def import_history() -> tuple[int, int, int]:
 
 if __name__ == "__main__":
     try:
-        requested, seen, added = import_history()
-        print(f"Requested history for {requested} matches; saw {seen} points; added {added} new observations.")
-        print("Kassalapp does not label regular versus promotional prices; imported rows use unknown price_type.")
+        requested, seen, added, days_included = import_history()
+        print(f"Requested history for {requested} matches; Kassalapp included {days_included} days; saw {seen} points; added {added} new observations.")
+        print("Kassalapp does not label promotions; imported rows retain unknown price_type.")
     except RuntimeError as exc:
         print(f"Error: {exc}", file=sys.stderr)
-        raise SystemExit(1)
+        raise SystemExit(1)\n
