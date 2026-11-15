@@ -43,13 +43,21 @@ class PriceLogicTests(unittest.TestCase):
         self.assertEqual(result["price_drop_percent"], Decimal("30"))
 
     def test_flat_price_product_has_no_price_drop(self):
-        result = self.classify(daily_prices([10000] * 30), 10000)
+        result = self.classify(daily_prices([10000] * 60), 10000)
         self.assertEqual(result["regular_price_minor"], Decimal("10000"))
         self.assertEqual(result["status"], "no price drop")
         self.assertFalse(result["is_price_drop"])
 
     def test_too_little_history_is_insufficient_data(self):
         result = self.classify(daily_prices([10000] * 5), 5000)
+        self.assertEqual(result["status"], "insufficient data")
+        self.assertIsNone(result["regular_price_minor"])
+        self.assertFalse(result["is_price_drop"])
+
+    def test_rice_like_41_day_history_is_insufficient_data(self):
+        result = self.classify(daily_prices([10000] * 41), 8000)
+        self.assertEqual(result["observations"], 41)
+        self.assertEqual(result["distinct_days"], 41)
         self.assertEqual(result["status"], "insufficient data")
         self.assertIsNone(result["regular_price_minor"])
         self.assertFalse(result["is_price_drop"])

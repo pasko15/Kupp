@@ -1,6 +1,6 @@
 freshness_days: 14
 history_window_days: 90
 regular_price_percentile: 75
-minimum_price_observations: 14
-minimum_price_distinct_days: 14
+minimum_price_observations: 60
+minimum_price_distinct_days: 60
 minimum_price_drop_percent: 10
