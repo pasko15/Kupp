@@ -1,8 +1,8 @@
-﻿"""Pure deterministic price calculations for Kupp."""
+"""Pure price calculations for Kupp."""
 
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from typing import Iterable
 
@@ -27,6 +27,22 @@ def unit_price(price_minor: int, pack_size: float | None, pack_unit: str | None)
     return None
 
 
+def money(price_minor: int | Decimal | None) -> Decimal | None:
+    """Convert integer minor currency units into major currency units."""
+    return None if price_minor is None else Decimal(price_minor) / 100
+
+
+def is_fresh(check_time: str | None, now: datetime, freshness_days: int) -> bool | None:
+    """Whether the source checked this price recently; None means no check timestamp."""
+    if not check_time:
+        return None
+    parsed = datetime.fromisoformat(check_time.replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    age = (now.astimezone(timezone.utc) - parsed.astimezone(timezone.utc)).total_seconds() / 86400
+    return 0 <= age <= freshness_days
+
+
 def _observation_date(point: dict) -> date:
     return date.fromisoformat(str(point["observed_at"])[:10])
 
@@ -48,11 +64,7 @@ def regular_price_estimate(
         raise ValueError("window_days must be positive")
 
     start_date = as_of - timedelta(days=window_days - 1)
-    points = [
-        point
-        for point in observations
-        if start_date <= _observation_date(point) <= as_of
-    ]
+    points = [point for point in observations if start_date <= _observation_date(point) <= as_of]
     dates = sorted({_observation_date(point) for point in points})
     result = {
         "observations": len(points),
@@ -99,12 +111,7 @@ def price_drop_vs_history(
         as_of=as_of,
     )
     if estimate["status"] == "insufficient data" or current_minor is None:
-        return {
-            **estimate,
-            "status": "insufficient data",
-            "price_drop_percent": None,
-            "is_price_drop": False,
-        }
+        return {**estimate, "status": "insufficient data", "price_drop_percent": None, "is_price_drop": False}
 
     drop = discount_percent(estimate["regular_price_minor"], current_minor)
     is_drop = drop is not None and drop >= Decimal(str(min_drop_percent))
