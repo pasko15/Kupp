@@ -1,0 +1,11 @@
+item_id,product_name,brand,variant,pack_size,pack_unit,ean,sweden_match_preference,notes
+milk,Milk,Tine,Lettmelk 1%,1.75,L,,equivalent_ok,Usual brand is Tine; equivalent brands accepted.
+frozen-chicken-breast,Frozen chicken breast,,,,,,equivalent_ok,Brand flexible; match frozen chicken breast and pack size.
+red-meat,Red meat,,,,,,equivalent_ok,Brand flexible; entrecôte is an example. Exact cut and fresh/frozen status still need specifying.
+fish-fingers,Fiskepinner,,,,,,equivalent_ok,Brand flexible; pack size still needs specifying.
+pepsi-max,Sugar-free cola,,Pepsi Max or Cola Zero,,,,equivalent_ok,Brand flexible; package size still needs specifying.
+eggs,Eggs,First Price,,,,,equivalent_ok,Any First Price eggs; egg size and carton count still need specifying.
+flour,Flour,,,,,,equivalent_ok,Brand flexible; flour type and pack size still need specifying.
+rice,Rice,,,,,,equivalent_ok,Brand flexible; rice type and pack size still need specifying.
+pasta,Pasta,,,,,,equivalent_ok,Brand flexible; pasta type and pack size still need specifying.
+bread,Toast-style bread,,Orange packaging,,,,equivalent_ok,"Retained from your earlier list; orange package, toast style. Brand and pack size unknown."

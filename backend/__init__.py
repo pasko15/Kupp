@@ -1,0 +1,1 @@
+"""Kupp backend package."""

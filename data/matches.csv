@@ -1,0 +1,6 @@
+item_id,source,source_product_id,source_ean,matched_name,pack_size,pack_unit,match_type,confidence,notes
+milk,Kassalapp,7038010000980,7038010000980,Tine Lettmelk 1% fett 1.75l,1.75,L,identical,1.0,User confirmed Tine 1% 1.75 L.
+fish-fingers,Kassalapp,7035620057137,7035620057137,Fiskepinner 450g First Price,450,g,equivalent,0.95,Brand flexible; current Kassalapp match has the same product type.
+pepsi-max,Kassalapp,5000112554359,5000112554359,Coca-Cola Zero 330ml,330,ml,equivalent,0.95,User accepts Pepsi Max or Cola Zero; this is the current Cola Zero candidate.
+rice,Kassalapp,6291100690817,6291100690817,Double Diamond Basmatiris 2kg,2000,g,equivalent,0.65,Representative basmati rice; rice variety was unspecified.
+pasta,Kassalapp,7035620018930,7035620018930,Pasta Penne 500g Eldorado,500,g,equivalent,0.75,Representative penne pasta; pasta shape was unspecified.

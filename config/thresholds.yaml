@@ -1,0 +1,4 @@
+freshness_days: 14
+minimum_nonpromo_observations: 14
+minimum_nonpromo_days: 14
+minimum_verified_discount_percent: 10

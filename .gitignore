@@ -1,0 +1,9 @@
+.env
+!.env.example
+__pycache__/
+*.py[cod]
+data/kupp.db
+data/kupp.db-*
+data/price-report.json
+scratch/kassalapp-sample.json
+data/kupp.db.*
